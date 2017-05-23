@@ -1,0 +1,14 @@
+{
+  "name": "heroku_ping",
+  "version": "1.0.0",
+  "description": "pings free heroku app to leep them awake.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "jer bushau",
+  "license": "MIT",
+  "dependencies": {
+    "request": "^2.81.0"
+  }
+}
