@@ -4,6 +4,7 @@
   "description": "pings free heroku app to leep them awake.",
   "main": "app.js",
   "scripts": {
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "jer bushau",
