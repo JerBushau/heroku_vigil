@@ -16,18 +16,25 @@ module.exports = {
     let time;
     let unit;
 
+    function pluralize(word, num) {
+      if(num > 1) {
+        word+= 's';
+      }
+      return word
+    }
+
     if (timeInMil > 3600000) {
-      unit = 'hour(s)';
+      unit = 'hour';
       time = +this.convertTime('hr', timeInMil).toFixed(1);
 
     } else if (timeInMil > 60000) {
-      unit = 'minute(s)';
+      unit = 'minute';
       time = +this.convertTime('min', timeInMil).toFixed(1);
 
     } else if (timeInMil > 1000) {
-      unit = 'second(s)';
+      unit = 'second';
       time = this.convertTime('sec', timeInMil).toFixed(0);
     }
-    return `${time} ${unit}`
+    return `${time} ${pluralize(unit, time)}`
   }
 }
