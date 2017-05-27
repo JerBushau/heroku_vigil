@@ -1,16 +1,16 @@
 'use strict'
 
 const request = require('request');
-const convertTime = require('./helpers');
+const helpers = require('./helpers');
 
 class Vigil {
   constructor(url) {
-    this.URL = url;
     this.startTime = Date.now();
-    this.runtime = 8;
-    this.gap = 20;
+    this.URL = url;
+    this.gap = process.argv[2] || 20;
+    this.runtime = process.argv[3] || 8;
     this.req = {
-      interval: convertTime('mil', this.gap, 'min'),
+      interval: helpers.convertTime('mil', this.gap, 'min'),
       count: 0
     }
   }
@@ -29,40 +29,31 @@ class Vigil {
   exit(){
     this.endTime = Date.now();
     let elapsedTimeMil = (this.endTime - this.startTime);
-    let elapsedTime;
-    let unit;
-
-    if (elapsedTimeMil > 3600000) {
-      unit = 'hour(s)';
-      elapsedTime = +convertTime('hr', elapsedTimeMil).toFixed(1);
-
-    } else if (elapsedTimeMil > 60000) {
-      unit = 'minute(s)';
-      elapsedTime = +convertTime('min', elapsedTimeMil).toFixed(1);
-
-    } else if (elapsedTimeMil > 1000) {
-      unit = 'second(s)';
-      elapsedTime = convertTime('sec', elapsedTimeMil).toFixed(0);
-    }
 
     console.log(`
-Vigil lasted: ${elapsedTime} ${unit}
+Vigil lasted: ${helpers.formatTime(elapsedTimeMil)}
 Requests made: ${this.req.count}`);
   }
 
   init() {
-    console.log(
-`----------------
-| Heroku Vigil |
-----------------
-Keeping your free Heroku dyno awake and alert
-for as long as possible. ;)\n
-Set to request ${this.URL}.
-Every ${this.gap} minute(s) for ${this.runtime} hour(s).\n`);
+    console.log(`
+    ,,;;;;;,,
+  ,;;:::::::;;,     ----------------
+ ,;;::' , ':::;,    | Heroku Vigil |
+ ;;::  /(   ::;;    ----------------
+ ;;:: |  \\  ::;;
+ ';;::.\\|/.::;;'    Keeping free Heroku dynos awake and alert
+  ';:::'-.:::;'       for as long as possible.
+    '';| |;''       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+       '-.          Set to request ${this.URL}.
+       | |          Every ${helpers.formatTime(this.req.interval)} for ${helpers.formatTime(helpers.convertTime('mil', this.runtime, 'hr'))}.
+      /\`"\`\\
+     \`"---"\`
+\n`)
 
     this.ping();
-    setInterval(_ => {this.ping()}, this.req.interval);
-    setTimeout(process.exit, convertTime('mil', this.runtime, 'hr'));
+    setInterval(_ => { this.ping() }, this.req.interval);
+    setTimeout(process.exit, helpers.convertTime('mil', this.runtime, 'hr'));
   }
 }
 
