@@ -19,7 +19,7 @@ class Vigil {
     request(this.URL, (err, res) => {
       if (!err) {
         this.req.count++;
-        console.log(`Request to ${this.URL} successful.`);
+        console.log(`Request ${this.req.count} to ${this.URL} successful.`);
       } else {
         console.error(err.message);
       }
@@ -51,13 +51,17 @@ Requests made: ${this.req.count}`);
   }
 
   init() {
-    console.log(`
-Heroku vigil!\n
+    console.log(
+`----------------
+| Heroku Vigil |
+----------------
+Keeping your free Heroku dyno awake and alert
+for as long as possible. ;)\n
 Set to request ${this.URL}.
 Every ${this.gap} minute(s) for ${this.runtime} hour(s).\n`);
 
     this.ping();
-    setInterval(this.ping, this.req.interval);
+    setInterval(_ => {this.ping()}, this.req.interval);
     setTimeout(process.exit, convertTime('mil', this.runtime, 'hr'));
   }
 }
