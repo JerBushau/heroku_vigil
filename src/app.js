@@ -3,6 +3,6 @@
 'use strict'
 
 const Vigil = require('./vigil');
-const vigil = new Vigil('https://www.google.com/');
+const vigil = new Vigil('https://google.com/');
 
 vigil.init();
